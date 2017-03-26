@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -p .docker && touch .docker/yarn.lock
-./init-docker-build.js
+# ./init-docker-build.js
 
 IMAGE_NAME="joehua/node-starter"
 
