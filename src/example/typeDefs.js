@@ -1,4 +1,8 @@
-export default `
+// @flow
+
+import gql from 'graphql-tag'
+
+export default gql`
 # Product Tag
 type ProductTag {
   _id: ID!
