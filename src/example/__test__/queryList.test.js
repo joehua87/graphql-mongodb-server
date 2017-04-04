@@ -32,8 +32,13 @@ function assertResponse({ data }: { data: any }) {
 describe('Query list: get products', () => {
   setUpAndTearDown()
 
+  let server
   before(() => {
-    app.listen(port) // App will close when mongodb closed
+    server = app.listen(port)
+  })
+
+  after(() => {
+    server.close()
   })
 
   it('without params', async () => {

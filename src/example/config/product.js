@@ -9,7 +9,7 @@ import {
  *   - category by _id (default)
  *   - tag by slug. So we need a preprocess function to convert Tag slug to _id
  */
-export default {
+export const filters = {
   category: {
     dbField: 'categories',
     dbType: String,
@@ -30,3 +30,5 @@ export default {
     compareType: 'EQUAL',
   },
 }
+
+export const populate = ['category', 'categories', 'tags', 'brands']

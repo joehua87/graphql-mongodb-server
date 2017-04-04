@@ -91,6 +91,7 @@ type ProductBrandResponse {
 
 # the schema allows the following query:
 type Query {
+  # List
   products(
     category: String, tag: String, brand: String
     sort: String, page: Int, limit: Int
@@ -98,6 +99,9 @@ type Query {
   brands(sort: String, page: Int, limit: Int): ProductBrandResponse
   categories(sort: String, page: Int, limit: Int): ProductCategoryResponse
   tags(sort: String, page: Int, limit: Int): ProductTagResponse
+
+  # Detail
+  product(slug: String): Product
 }
 
 # we need to tell the server which types represent the root query
