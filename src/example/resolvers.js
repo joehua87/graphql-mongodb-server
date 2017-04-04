@@ -12,6 +12,7 @@ const resolveFunctions = {
   ProductResponse: createQueryResolver(ProductModel.Model),
   Query: {
     products: (parentObj: any, args: any, context: any, info: any) => (
+      // NOTE Authorization goes here by receive data from context
       createQueryExtractor({
         filterFields: productFilter,
         populate: ['category', 'categories', 'tags', 'brands'],
