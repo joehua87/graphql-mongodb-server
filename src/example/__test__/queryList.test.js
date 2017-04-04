@@ -136,4 +136,50 @@ describe('Query list: get products', () => {
     expect(response.data.products.pagingInfo.limit).to.equal(50)
     expect(response.data.products.entities.length).to.equal(50)
   })
+
+  it('should populate', async () => {
+    const query = gql`
+    query TodoApp {
+      products {
+        pagingInfo {
+          sort
+          page
+          limit
+          total
+          hasMore
+        }
+        entities {
+          _id
+          slug
+          name
+          categories {
+            _id
+            slug
+            name
+          }
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+
+    assertResponse(response)
+    expect(response.data.products.pagingInfo.limit).to.equal(20)
+    expect(response.data.products.pagingInfo.total).to.equal(578)
+
+    // Make sure that at least 1 product have categories.length > 1
+    const productsHavingCategoriesCount = response.data.products.entities.filter(x => x.categories.length > 0).length
+    expect(productsHavingCategoriesCount).to.gt(0)
+
+    response.data.products.entities.forEach((product) => {
+      product.categories.forEach((cat) => {
+        expect(cat).to.have.property('_id')
+        expect(cat).to.have.property('slug')
+        expect(cat).to.have.property('name')
+      })
+    })
+  })
 })

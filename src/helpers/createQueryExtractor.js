@@ -10,9 +10,14 @@ const debug = require('debug')(`${appCode}:extract-query`)
  *   - filter to query entities
  *   - pagingInfo to query { total, hasMore }
  */
-export default function createQueryExtractor({ overrideFilter = {}, filterFields = {} }: {
+export default function createQueryExtractor({
+  overrideFilter = {},
+  filterFields = {},
+  populate = [],
+}: {
   overrideFilter?: { [key: string]: any },
   filterFields?: FilterFields,
+  populate: Array<string>,
 } = {}): QueryExtractorFn {
   return (
     obj: any,
@@ -22,6 +27,7 @@ export default function createQueryExtractor({ overrideFilter = {}, filterFields
 
     const query = {
       mongoFilter,
+      populate,
       pagingInfo: { sort, page, limit },
     }
     debug(query)

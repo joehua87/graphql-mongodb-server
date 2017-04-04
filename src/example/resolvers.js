@@ -12,7 +12,10 @@ const resolveFunctions = {
   ProductResponse: createQueryResolver(ProductModel.Model),
   Query: {
     products: (parentObj: any, args: any, context: any, info: any) => (
-      createQueryExtractor({ filterFields: productFilter })(
+      createQueryExtractor({
+        filterFields: productFilter,
+        populate: ['category', 'categories', 'tags', 'brands'],
+      })(
         parentObj, args, context, info,
       )
     ),

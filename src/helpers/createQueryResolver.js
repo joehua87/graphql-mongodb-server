@@ -19,7 +19,7 @@ function argsToObj(parentObj: any, args: any, context: any, info: any) {
 export default function createQueryResolver(Model: any) {
   return {
     entities(...args: Array<any>) {
-      const { parentObj: { mongoFilter, pagingInfo }, info } = argsToObj(...args)
+      const { parentObj: { mongoFilter, populate, pagingInfo }, info } = argsToObj(...args)
       const { sort, page = 1, limit = 20 } = pagingInfo
       const { projection } = getFields(info)
       return getEntities({
@@ -29,10 +29,10 @@ export default function createQueryResolver(Model: any) {
         page,
         limit,
         projection,
+        populate,
       })
     },
     pagingInfo(...args: Array<any>) {
-      console.log('Go here')
       const { parentObj: { mongoFilter, pagingInfo } } = argsToObj(...args)
       const { sort, page = 1, limit = 20 } = pagingInfo
       return getPagingInfo({

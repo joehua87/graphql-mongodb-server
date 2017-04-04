@@ -11,6 +11,7 @@ export default async function getEntities({
   page,
   limit,
   projection,
+  populate = [],
 }: {
   Model: any,
   mongoFilter: MongoFilter,
@@ -18,15 +19,24 @@ export default async function getEntities({
   page: number,
   limit: number,
   projection: string,
+  populate: Array<string>,
 }) {
   debug(`Start getEntities for model ${Model.modelName}`)
-  debug({ sort, page, limit, projection })
-  const entities = await Model.find(mongoFilter)
+  debug({ sort, page, limit, projection, populate })
+  let q = Model.find(mongoFilter)
     .select(projection)
     .sort(sort)
     .skip((page - 1) * limit)
     .limit(limit)
-    .lean()
+
+  /*
+   * NOTE need revise this assumption
+   * If the fields is not selected, it will not have value to populate.
+   * So we can safely populate all fields
+   */
+  populate.forEach((field) => { q = q.populate(field) })
+
+  const entities = await q.lean()
 
   debug(`Got ${entities.length} entities for model ${Model.modelName}`)
   return entities
