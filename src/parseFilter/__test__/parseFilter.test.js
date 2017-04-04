@@ -35,8 +35,8 @@ const filter = {
 }
 
 describe('parse filter', () => {
-  it('parse', () => {
-    const mongoFilter = parseFilter(filter, filterFields)
+  it('parse', async () => {
+    const mongoFilter = await parseFilter(filter, filterFields)
     const expectedMongoFilter = {
       name: /Hello/i,
       age: { $gte: 10, $lte: 100 },

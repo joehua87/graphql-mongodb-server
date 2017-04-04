@@ -19,11 +19,11 @@ export default function createQueryExtractor({
   filterFields?: FilterFields,
   populate: Array<string>,
 } = {}): QueryExtractorFn {
-  return (
+  return async (
     obj: any,
     { sort, page, limit, ...filter }: { sort: string, page: number, limit: number },
-  ): QueryExtractorResult => {
-    const mongoFilter = parseFilter({ ...filter, ...overrideFilter }, filterFields)
+  ): Promise<QueryExtractorResult> => {
+    const mongoFilter = await parseFilter({ ...filter, ...overrideFilter }, filterFields)
 
     const query = {
       mongoFilter,

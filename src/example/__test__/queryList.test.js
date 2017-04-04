@@ -70,7 +70,7 @@ describe('Query list: get products', () => {
     expect(response.data.products.pagingInfo.total).to.equal(578)
   })
 
-  it('without category filter', async () => {
+  it('without category _id filter', async () => {
     const query = gql`
     query TodoApp {
       products(category: "58c4bf341a6d674733a2b2dd") {
@@ -101,6 +101,39 @@ describe('Query list: get products', () => {
 
     assertResponse(response)
     expect(response.data.products.pagingInfo.total).to.equal(23)
+  })
+
+  it('without tag slug filter', async () => {
+    const query = gql`
+    query TodoApp {
+      products(tag: "thung-da-nhua") {
+        pagingInfo {
+          sort
+          page
+          limit
+          total
+          hasMore
+        }
+        entities {
+          _id
+          slug
+          name
+          images {
+            src
+            title
+          }
+          imageSrc
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+
+    assertResponse(response)
+    expect(response.data.products.pagingInfo.total).to.equal(15)
   })
 
   it('with paging limit', async () => {

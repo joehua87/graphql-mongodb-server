@@ -12,6 +12,7 @@ type FilterItem = {
   dbField: string,
   compareType: string,
   dbType: any,
+  preprocess?: Function,
 }
 
 type FilterFields = { [key: string]: FilterItem }
@@ -35,4 +36,4 @@ type QueryExtractorResult = {
   pagingInfo: { sort: string, page: number, limit: number },
 }
 
-type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number }) => QueryExtractorResult
+type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number }) => Promise<QueryExtractorResult>
