@@ -1,0 +1,38 @@
+/* eslint-disable no-unused-vars */
+
+type PagingInfo = {
+  sort: string,
+  page: number,
+  limit: number,
+  total: number,
+  hasMore: boolean,
+}
+
+type FilterItem = {
+  dbField: string,
+  compareType: string,
+  dbType: any,
+}
+
+type FilterFields = { [key: string]: FilterItem }
+
+type MongoFilter = { [key: string]: any }
+
+type GraphQLQuerySource = {
+  pagingInfo: PagingInfo,
+  filter: { [key: string]: any }
+}
+
+type GraphQLQueryArgs = {
+  parentObj: GraphQLQuerySource,
+  args: any,
+  context: any,
+  info: any,
+}
+
+type QueryExtractorResult = {
+  mongoFilter: MongoFilter,
+  pagingInfo: { sort: string, page: number, limit: number },
+}
+
+type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number }) => QueryExtractorResult
