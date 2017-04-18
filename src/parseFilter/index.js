@@ -57,7 +57,7 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
     // case constants.EXISTS:
     //   return { [dbField]: { $exists: value } }
     case constants.FULL_TEXT:
-      return { [dbField]: { $search: value } }
+      return { $text: { $search: value } }
     case constants.IN:
       return { [dbField]: { $in: value } }
     default:
