@@ -16,32 +16,41 @@ function argsToObj(parentObj: any, args: any, context: any, info: any) {
   }
 }
 
-export default function createQueryResolver(Model: any) {
-  return {
-    entities(...args: Array<any>) {
-      const { parentObj: { mongoFilter, populate, pagingInfo }, info } = argsToObj(...args)
-      const { sort, page = 1, limit = 20 } = pagingInfo
-      const { projection } = getFields(info)
-      return getEntities({
-        Model,
-        mongoFilter,
-        sort,
-        page,
-        limit,
-        projection,
-        populate,
-      })
-    },
-    pagingInfo(...args: Array<any>) {
-      const { parentObj: { mongoFilter, pagingInfo } } = argsToObj(...args)
-      const { sort, page = 1, limit = 20 } = pagingInfo
-      return getPagingInfo({
-        Model,
-        mongoFilter,
-        sort,
-        page,
-        limit,
-      })
-    },
+export default function createQueryResolver({ Model, checkAuthorization }: {
+  Model: any,
+  checkAuthorization?: (context: any) => Promise<any>,
+}) {
+  return async (...args: Array<any>) => {
+    const { parentObj: { mongoFilter, populate, pagingInfo }, context, info } = argsToObj(...args)
+    if (checkAuthorization) {
+      const error = await checkAuthorization(context)
+      if (error) return { error }
+    }
+
+    const { sort, page = 1, limit = 20 } = pagingInfo
+    const { projection } = getFields(info)
+
+    const entities = await getEntities({
+      Model,
+      mongoFilter,
+      sort,
+      page,
+      limit,
+      projection,
+      populate,
+    })
+
+    const _pagingInfo = await getPagingInfo({
+      Model,
+      mongoFilter,
+      sort,
+      page,
+      limit,
+    })
+
+    return {
+      entities,
+      pagingInfo: _pagingInfo,
+    }
   }
 }

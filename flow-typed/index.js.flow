@@ -32,8 +32,10 @@ type GraphQLQueryArgs = {
 }
 
 type QueryExtractorResult = {
-  mongoFilter: MongoFilter,
-  pagingInfo: { sort: string, page: number, limit: number },
+  error?: any,
+  mongoFilter?: MongoFilter,
+  pagingInfo?: { sort: string, page: number, limit: number },
+  populate?: Array<string>,
 }
 
 type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number }) => Promise<QueryExtractorResult>
