@@ -72,7 +72,7 @@ describe('Query list: get products', () => {
 
     assertResponse(response)
     expect(response.data.products.pagingInfo.limit).to.equal(20)
-    expect(response.data.products.pagingInfo.total).to.equal(578)
+    expect(response.data.products.pagingInfo.total).to.equal(579)
   })
 
   it('without category _id filter', async () => {
@@ -206,7 +206,7 @@ describe('Query list: get products', () => {
 
     assertResponse(response)
     expect(response.data.products.pagingInfo.limit).to.equal(20)
-    expect(response.data.products.pagingInfo.total).to.equal(578)
+    expect(response.data.products.pagingInfo.total).to.equal(579)
 
     // Make sure that at least 1 product have categories.length > 1
     const productsHavingCategoriesCount = response.data.products.entities.filter(x => x.categories.length > 0).length

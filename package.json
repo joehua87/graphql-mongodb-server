@@ -10,7 +10,8 @@
     "test": "nyc -r text -r lcov npm run test:js",
     "prepublish": "npm run build",
     "pretest": "npm run lint && npm run flow",
-    "test:js": "NODE_ENV=test mocha --require babel-register 'src/**/__test__/*.test.js' -t 10000"
+    "test:js": "NODE_ENV=test mocha --require babel-register 'src/**/__test__/*.test.js' -t 10000",
+    "test:file": "NODE_ENV=test mocha --require babel-register -t 10000"
   },
   "files": [
     "bin",
@@ -53,6 +54,7 @@
     "graphql-server-koa": "^0.6.0",
     "graphql-tag": "^2.0.0",
     "graphql-tools": "^0.11.0",
+    "graphql-type-json": "^0.1.4",
     "isomorphic-fetch": "^2.2.1",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",

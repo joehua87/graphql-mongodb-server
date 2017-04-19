@@ -14,7 +14,10 @@ const router = new KoaRouter()
 app.use(convert(koaCors()))
 app.use(koaBody())
 
-router.post('/graphql', graphqlKoa({ schema: myGraphQLSchema }))
+router.post('/graphql', (ctx) => {
+  const context = { user: 'test' }
+  return graphqlKoa({ schema: myGraphQLSchema, context })(ctx)
+})
 router.get('/graphiql', graphiqlKoa({ endpointURL: '/graphql' }))
 app.use(router.routes())
 app.use(router.allowedMethods())

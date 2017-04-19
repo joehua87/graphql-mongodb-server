@@ -3,6 +3,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
+scalar JSON
+
 # Product Tag
 type ProductTag {
   _id: ID!
@@ -76,21 +78,25 @@ type PagingInfo {
 type ProductResponse {
   entities: [Product],
   pagingInfo: PagingInfo,
+  error: JSON
 }
 
 type ProductCategoryResponse {
   entities: [ProductCategory],
   pagingInfo: PagingInfo,
+  error: JSON
 }
 
 type ProductTagResponse {
   entities: [ProductTag],
   pagingInfo: PagingInfo,
+  error: JSON
 }
 
 type ProductBrandResponse {
   entities: [ProductBrand],
   pagingInfo: PagingInfo,
+  error: JSON
 }
 
 # the schema allows the following query:

@@ -7,13 +7,11 @@ import createMutation, {
   createRemoveMutation,
 } from './helpers/createMutation'
 import getFields from './helpers/getFields'
-import createQueryExtractor from './helpers/createQueryExtractor'
-import createQueryResolver from './helpers/createQueryResolver'
+import createQuery from './helpers/createQuery'
 
 export {
   createGetOne,
-  createQueryExtractor,
-  createQueryResolver,
+  createQuery,
   getFields,
   createMutation,
   createCreateMutation,
