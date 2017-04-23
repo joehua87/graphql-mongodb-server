@@ -20,10 +20,10 @@ export const filters = {
     compareType: 'EQUAL',
     preprocess: async (tag: string) => {
       const obj = await ProductTagModel.Model.findOne({ slug: tag }).select('_id')
-      if (obj) {
-        return { tags: obj._id }
+      if (!obj) {
+        return { xxx: true }
       }
-      return {}
+      return { tags: obj._id }
     },
   },
   brand: {
