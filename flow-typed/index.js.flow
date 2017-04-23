@@ -9,7 +9,7 @@ type PagingInfo = {
 }
 
 type FilterItem = {
-  dbField: string,
+  dbField?: string,
   compareType: string,
   dbType: any,
   preprocess?: Function,

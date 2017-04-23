@@ -30,15 +30,20 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
   const item: FilterItem = filterFields[key]
   if (!item) return null
 
-  let value = getValue(filter[key], item.dbType)
+  const value = getValue(filter[key], item.dbType)
+
   if (item.preprocess) {
-    value = await preprocessValue({
+    return preprocessValue({
       fn: item.preprocess,
       value,
     })
   }
 
   const dbField = item.dbField
+  if (!dbField) {
+    throw new Error('Require dbField or preprocess')
+  }
+
   switch (item.compareType) {
     case constants.EQUAL:
       return { [dbField]: value }

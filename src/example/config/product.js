@@ -16,12 +16,14 @@ export const filters = {
     compareType: 'EQUAL',
   },
   tag: {
-    dbField: 'tags',
     dbType: String,
     compareType: 'EQUAL',
     preprocess: async (tag: string) => {
       const obj = await ProductTagModel.Model.findOne({ slug: tag }).select('_id')
-      return obj._id
+      if (obj) {
+        return { tags: obj._id }
+      }
+      return {}
     },
   },
   brand: {
