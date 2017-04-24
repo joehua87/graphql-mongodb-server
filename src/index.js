@@ -8,6 +8,7 @@ import createMutation, {
 } from './helpers/createMutation'
 import getFields from './helpers/getFields'
 import createQuery from './helpers/createQuery'
+import parseFilter from './parseFilter/'
 
 export {
   createGetOne,
@@ -17,4 +18,5 @@ export {
   createCreateMutation,
   createEditMutation,
   createRemoveMutation,
+  parseFilter,
 }
