@@ -39,9 +39,13 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
     })
   }
 
+  if (item.compareType === constants.FULL_TEXT) {
+    return { $text: { $search: value } }
+  }
+
   const dbField = item.dbField
   if (!dbField) {
-    throw new Error('Require dbField or preprocess')
+    throw new Error('Require dbField, preprocess or compareType = FULL_TEXT')
   }
 
   switch (item.compareType) {
@@ -61,8 +65,6 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
       return { [dbField]: new RegExp(value, 'i') }
     // case constants.EXISTS:
     //   return { [dbField]: { $exists: value } }
-    case constants.FULL_TEXT:
-      return { $text: { $search: value } }
     case constants.IN:
       return { [dbField]: { $in: value } }
     default:
