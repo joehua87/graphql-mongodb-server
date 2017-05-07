@@ -25,7 +25,16 @@ export default async function getEntities({
   debug({ sort, page, limit, projection, populate })
   let q = Model.find(mongoFilter)
     .select(projection)
-    .sort(sort)
+
+  if (sort === 'relavant') {
+    q = q
+      .select({ score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' } })
+  } else {
+    q = q.sort(sort)
+  }
+
+  q = q
     .skip((page - 1) * limit)
     .limit(limit)
 
