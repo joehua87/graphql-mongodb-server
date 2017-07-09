@@ -108,6 +108,38 @@ describe('Query list: get products', () => {
     expect(response.data.products.pagingInfo.total).to.equal(23)
   })
 
+  it('with overrideFilter', async () => {
+    const query = gql`
+    query TodoApp {
+      restrictedProducts {
+        pagingInfo {
+          sort
+          page
+          limit
+          total
+          hasMore
+        }
+        entities {
+          _id
+          slug
+          name
+          images {
+            src
+            title
+          }
+          imageSrc
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+
+    expect(response.data.restrictedProducts.pagingInfo.total).to.equal(23)
+  })
+
   it('without tag slug filter', async () => {
     const query = gql`
     query TodoApp {

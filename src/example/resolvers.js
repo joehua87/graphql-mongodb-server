@@ -22,6 +22,15 @@ const resolveFunctions = {
       filterFields: productConfig.filters,
       populate: productConfig.populate,
     }),
+    restrictedProducts: createQuery({
+      Model: ProductModel.Model,
+      filterFields: productConfig.filters,
+      populate: productConfig.populate,
+      overrideFilter: async () => {
+        const filter = await Promise.resolve({ categories: '58c4bf341a6d674733a2b2dd' })
+        return filter
+      },
+    }),
     categories: createQuery({
       Model: ProductCategoryModel.Model,
       checkAuthorization: checkAuthorizationFail,

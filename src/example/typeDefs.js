@@ -106,6 +106,11 @@ type Query {
     category: String, tag: String, brand: String
     sort: String, page: Int, limit: Int
   ): ProductResponse
+  # Test overrideFilter
+  restrictedProducts(
+    category: String, tag: String, brand: String
+    sort: String, page: Int, limit: Int
+  ): ProductResponse
   brands(sort: String, page: Int, limit: Int): ProductBrandResponse
   categories(sort: String, page: Int, limit: Int): ProductCategoryResponse
   tags(sort: String, page: Int, limit: Int): ProductTagResponse

@@ -12,13 +12,13 @@ const debug = require('debug')(`${appCode}:create-query`)
  */
 export default function createQuery({
   Model,
-  overrideFilter = {},
+  overrideFilter,
   filterFields = {},
   populate = [],
   checkAuthorization,
 }: {
   Model: any,
-  overrideFilter?: { [key: string]: any },
+  overrideFilter?: { [key: string]: any } | Function,
   filterFields?: FilterFields,
   populate?: Array<string>,
   checkAuthorization?: Function,
@@ -33,7 +33,22 @@ export default function createQuery({
       debug('checkAuthorization', { context, error })
       if (error) return { error }
     }
-    const mongoFilter = await parseFilter({ ...filter, ...overrideFilter }, filterFields)
+
+    let _overrideFilter = overrideFilter || {}
+
+    if (typeof _overrideFilter === 'function') {
+      _overrideFilter = await _overrideFilter(context)
+    }
+
+    const _mongoFilter = await parseFilter({
+      ...filter,
+    }, filterFields)
+
+    // Merge MongoFilter parsed from query & override Filter
+    const mongoFilter = {
+      ..._mongoFilter,
+      ..._overrideFilter,
+    }
 
     const entities = await getEntities({
       Model,
