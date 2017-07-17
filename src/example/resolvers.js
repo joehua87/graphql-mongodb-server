@@ -8,12 +8,21 @@ import {
 import createQuery from '../helpers/createQuery'
 import createGetOne from '../helpers/createGetOne'
 import * as productConfig from './config/product'
+import { appCode } from '../config'
 
-const checkAuthorizationFail = async () => ({
-  message: 'Required user',
-})
+const debug = require('debug')(`${appCode}:resolvers`)
 
-const checkAuthorizationSuccess = () => null
+const checkAuthorizationFail = async (...params) => {
+  debug(params)
+  return {
+    message: 'Required user',
+  }
+}
+
+const checkAuthorizationSuccess = async (...params) => {
+  debug(params)
+  return null
+}
 
 const resolveFunctions = {
   Query: {
@@ -21,6 +30,7 @@ const resolveFunctions = {
       Model: ProductModel.Model,
       filterFields: productConfig.filters,
       populate: productConfig.populate,
+      checkAuthorizationSuccess,
     }),
     restrictedProducts: createQuery({
       Model: ProductModel.Model,
@@ -42,6 +52,7 @@ const resolveFunctions = {
     product: createGetOne({
       Model: ProductModel.Model,
       populate: productConfig.populate,
+      checkAuthorizationSuccess,
     }),
   },
 }

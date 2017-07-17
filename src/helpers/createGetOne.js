@@ -13,11 +13,11 @@ export default function createGetOne({ Model, populate, checkAuthorization }: {
   return async function getOne(
     obj: any,
     args: any,  // Example: { slug }: { slug: string },
-    ctx: any,
+    context: any,
     info: any,
   ): Promise<any> {
     if (checkAuthorization) {
-      const error = await checkAuthorization(context)
+      const error = await checkAuthorization({ parent: obj, args, context, info })
       debug('checkAuthorization', { context, error })
       if (error) return { error }
     }

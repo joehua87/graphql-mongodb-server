@@ -9,9 +9,9 @@ export function createRemoveMutation({
   populate: Array<string>,
   checkAuthorization?: (context: any) => Promise<any>,
 }) {
-  return async (parentObj: any, entity: any, context: any) => {
+  return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization(context)
+      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
       if (error) return { error }
     }
     const { _id } = entity
@@ -33,9 +33,9 @@ export function createCreateMutation({
   populate: Array<string>,
   checkAuthorization?: (context: any) => Promise<any>,
 }) {
-  return async (parentObj: any, entity: any, context: any) => {
+  return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization(context)
+      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
       if (error) return { error }
     }
     const { _id } = await Model.create(entity)
@@ -57,9 +57,9 @@ export function createEditMutation({
   populate: Array<string>,
   checkAuthorization?: (context: any) => Promise<any>,
 }) {
-  return async (parentObj: any, entity: any, context: any) => {
+  return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization(context)
+      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
       if (error) return { error }
     }
 

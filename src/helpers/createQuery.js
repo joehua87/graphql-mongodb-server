@@ -25,11 +25,13 @@ export default function createQuery({
 } = {}): QueryExtractorFn {
   return async (
     obj: any,
-    { sort, page = 1, limit = 20, ...filter }: { sort: string, page: number, limit: number },
+    args: { sort: string, page: number, limit: number },
     context,
+    info: any,
   ): Promise<QueryExtractorResult> => {
+    const { sort, page = 1, limit = 20, ...filter } = args
     if (checkAuthorization) {
-      const error = await checkAuthorization(context)
+      const error = await checkAuthorization({ parent: obj, args, context, info })
       debug('checkAuthorization', { context, error })
       if (error) return { error }
     }
