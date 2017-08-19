@@ -116,7 +116,10 @@ type Query {
   tags(sort: String, page: Int, limit: Int): ProductTagResponse
 
   # Detail
-  product(slug: String): Product
+  product(
+    slug: String,
+    customFilterSlug: String,
+  ): Product
 }
 
 # we need to tell the server which types represent the root query

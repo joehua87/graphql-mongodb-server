@@ -45,6 +45,24 @@ describe('Get one', () => {
     expect(response.data.product.slug).to.equal(slug)
   })
 
+  it('get with customer filter', async () => {
+    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
+    const query = gql`
+    query ProductDetail {
+      product(customFilterSlug: "${slug}") {
+        _id
+        slug
+        name
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+    expect(response.data.product.slug).to.equal(slug)
+  })
+
   it('get with populate', async () => {
     const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
     const query = gql`

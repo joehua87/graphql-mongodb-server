@@ -15,6 +15,10 @@ export const filters = {
     dbType: String,
     compareType: 'EQUAL',
   },
+  customFilterSlug: {
+    dbType: String,
+    preprocess: (slug: string) => ({ slug }),
+  },
   tag: {
     dbType: String,
     compareType: 'EQUAL',

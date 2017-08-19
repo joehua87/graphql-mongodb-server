@@ -51,6 +51,7 @@ const resolveFunctions = {
     }),
     product: createGetOne({
       Model: ProductModel.Model,
+      filterFields: productConfig.filters,
       populate: productConfig.populate,
       checkAuthorizationSuccess,
     }),
