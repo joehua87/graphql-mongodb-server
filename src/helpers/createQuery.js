@@ -29,9 +29,13 @@ export default function createQuery({
     context,
     info: any,
   ): Promise<QueryExtractorResult> => {
-    const { sort, page = 1, limit = 20, ...filter } = args
+    const {
+      sort, page = 1, limit = 20, ...filter
+    } = args
     if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: obj, args, context, info })
+      const error = await checkAuthorization({
+        parent: obj, args, context, info,
+      })
       debug('checkAuthorization', { context, error })
       if (error) return { error }
     }

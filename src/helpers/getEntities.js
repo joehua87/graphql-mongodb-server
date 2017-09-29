@@ -22,7 +22,9 @@ export default async function getEntities({
   populate: Array<string>,
 }) {
   debug(`Start getEntities for model ${Model.modelName}`)
-  debug({ sort, page, limit, projection, populate })
+  debug({
+    sort, page, limit, projection, populate,
+  })
   let q = Model.find(mongoFilter)
     .select(projection)
 
