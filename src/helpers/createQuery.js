@@ -1,8 +1,10 @@
 // @flow
 
+import R from 'ramda'
 import parseFilter from '../parseFilter'
 import getEntities from './getEntities'
 import getPagingInfo from './getPagingInfo'
+import getProjection from './getProjection'
 import { appCode } from '../config'
 
 const debug = require('debug')(`${appCode}:create-query`)
@@ -56,13 +58,18 @@ export default function createQuery({
       ..._overrideFilter,
     }
 
+    const projection = getProjection({ field: 'entities', info })
+
+    debug('projection', projection)
+    debug('populate', R.intersection(populate, projection))
+
     const entities = await getEntities({
       Model,
       mongoFilter,
       sort,
       page,
       limit,
-      // projection, TODO Extract projection from info
+      projection,
       populate,
     })
 

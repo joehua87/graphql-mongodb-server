@@ -18,7 +18,7 @@ export default async function getEntities({
   sort: string,
   page: number,
   limit: number,
-  projection?: string,
+  projection?: string | string[],
   populate: Array<string>,
 }) {
   debug(`Start getEntities for model ${Model.modelName}`)
