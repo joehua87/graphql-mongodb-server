@@ -1,6 +1,6 @@
 {
   "name": "graphql-mongodb-server",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "",
   "main": "lib",
   "scripts": {
@@ -10,11 +10,14 @@
     "test": "nyc -r text -r lcov npm run test:js",
     "prepublish": "npm run build",
     "pretest": "npm run lint && npm run flow",
-    "test:js":
-      "NODE_ENV=test mocha --require babel-register 'src/**/__test__/*.test.js' -t 10000",
+    "test:js": "NODE_ENV=test mocha --require babel-register 'src/**/__test__/*.test.js' -t 10000",
     "test:file": "NODE_ENV=test mocha --require babel-register -t 10000"
   },
-  "files": ["bin", "lib", "flow-typed/index.js.flow"],
+  "files": [
+    "bin",
+    "lib",
+    "flow-typed/index.js.flow"
+  ],
   "bin": {},
   "repository": {
     "url": "git+https://github.com/joehua87/graphql-mongodb-server.git",
