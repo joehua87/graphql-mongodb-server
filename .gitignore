@@ -47,3 +47,6 @@ lib
 
 # config eslintrc by vscode
 .eslintrc.json
+
+# task in vscode
+.vscode/task.json
