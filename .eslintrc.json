@@ -1,0 +1,28 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "airbnb-base",
+        "plugin:flowtype/recommended"
+    ],
+    "plugins": [
+        "eslint-plugin-flowtype"
+    ],
+    "rules": {
+        "semi": [
+            2,
+            "never"
+        ],
+        "no-underscore-dangle": 0,
+        "linebreak-style": 0,
+        "max-len": 0,
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true
+            }
+        ]
+    },
+    "env": {
+        "mocha": true
+    }
+}

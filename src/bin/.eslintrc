@@ -1,4 +1,7 @@
 {
+  "plugins": [
+    "eslint-plugin-flowtype"
+  ],
   "rules": {
     "no-console": 0
   }

@@ -7,7 +7,7 @@ const debug = require('debug')(`${appCode}:config-test`)
 
 export function setUpAndTearDown(initialData) {
   before(async () => {
-    await mongoose.open(mongoUri)
+    await mongoose.openUri(mongoUri)
     if (initialData) {
       await Promise.map(initialData, async (item) => {
         debug(`Start to insert ${item.schemaName}`)

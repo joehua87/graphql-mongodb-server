@@ -75,10 +75,16 @@ type PagingInfo {
   hasMore: Boolean,
 }
 
+type PermissionResult {
+  error: JSON,
+  filter: JSON,
+  projection: JSON
+}
 type ProductResponse {
   entities: [Product],
   pagingInfo: PagingInfo,
-  error: JSON
+  error: JSON,
+  permission: PermissionResult
 }
 
 type ProductCategoryResponse {
@@ -104,7 +110,7 @@ type Query {
   # List
   products(
     category: String, tag: String, brand: String
-    sort: String, page: Int, limit: Int
+    sort: String, page: Int, limit: Int, actionCode: String
   ): ProductResponse
   # Test overrideFilter
   restrictedProducts(

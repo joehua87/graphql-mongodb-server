@@ -22,7 +22,7 @@ export default function createGetOne({
 }) {
   return async function getOne(
     obj: any,
-    args: any,  // Example: { slug }: { slug: string },
+    args: any, // Example: { slug }: { slug: string },
     context: any,
     info: any,
   ): Promise<any> {

@@ -1,0 +1,39 @@
+-
+ id: '5961d2f1c7a700bb5429ffd1'
+ sku: 'IT0001'
+ model: 'model'
+ slug: 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
+ name: 'name'
+ description: 'ghi chu'
+ listPrice: 1000
+ salePrice: 1500
+ category: '58c4bf341a6d674733a2b2dd'
+ categories: ['597f04ff27c3aa0101496440','58c4bf341a6d674733a2b2dd']
+ tags: ['597f04ff27c3aa0101496440']
+ brands: ['597f04ff27c3aa0101496440']
+-
+ id: '5961d2f1c7a700bb5429ffd2'
+ sku: 'IT0002'
+ model: 'model02'
+ slug: 'tu-nhua-duy-tan-sake-5-tang-5-ngan'
+ name: 'name 02'
+ description: 'ghi chu02'
+ listPrice: 2000
+ salePrice: 2500
+ category: '58c4bf341a6d674733a2b2dd'
+ categories: ['597f04ff27c3aa0101496440','58c4bf341a6d674733a2b2dd']
+ tags: ['597f04ff27c3aa0101496440']
+ brands: ['597f04ff27c3aa0101496440']
+-
+ id: '5961d2f1c7a700bb5429ffd3'
+ sku: 'IT0003'
+ model: 'model03'
+ slug: 'tu-nhua-duy-tan-sake-6-tang-6-ngan'
+ name: 'name 03'
+ description: 'ghi chu 03'
+ listPrice: 3000
+ salePrice: 3500
+ category: '58c4bf341a6d674733a2b2dd'
+ categories: ['597f04ff27c3aa0101496440','58c4bf341a6d674733a2b2dd']
+ tags: ['597f04ff27c3aa0101496440']
+ brands: ['597f04ff27c3aa0101496440']
