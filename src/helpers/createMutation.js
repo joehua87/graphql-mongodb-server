@@ -11,7 +11,9 @@ export function createRemoveMutation({
 }) {
   return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
+      const error = await checkAuthorization({
+        parent: parentObj, context, args: entity, info,
+      })
       if (error) return { error }
     }
     const { _id } = entity
@@ -35,7 +37,9 @@ export function createCreateMutation({
 }) {
   return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
+      const error = await checkAuthorization({
+        parent: parentObj, context, args: entity, info,
+      })
       if (error) return { error }
     }
     const { _id } = await Model.create(entity)
@@ -59,7 +63,9 @@ export function createEditMutation({
 }) {
   return async (parentObj: any, entity: any, context: any, info: any) => {
     if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: parentObj, context, args: entity, info })
+      const error = await checkAuthorization({
+        parent: parentObj, context, args: entity, info,
+      })
       if (error) return { error }
     }
 

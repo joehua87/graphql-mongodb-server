@@ -36,7 +36,9 @@ const checkPermission = async (...params) => {
           { category: '58c4bf341a6d674733a2b2dd', listPrice: 2000 },
         ],
       },
-      projection: { _id: 1, slug: 1, name: 1, description: 1, listPrice: 1 },
+      projection: {
+        _id: 1, slug: 1, name: 1, description: 1, listPrice: 1,
+      },
       // projection: 'slug name description category listPrice -sku -salePrice -model',
     }
   } else if (params[0].args.actionCode === 'view_product_basic') {

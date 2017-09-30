@@ -18,7 +18,8 @@ const getValue = (value: string, type: any): any => {
   }
 }
 
-async function preprocessValue({ fn, value }: {
+async function preprocessValue({
+  fn, value }: {
   fn: Function,
   value: string,
 }): Promise<any> {
@@ -43,7 +44,7 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
     return { $text: { $search: value } }
   }
 
-  const dbField = item.dbField
+  const { dbField } = item
   if (!dbField) {
     throw new Error('Require dbField, preprocess or compareType = FULL_TEXT')
   }
@@ -74,10 +75,8 @@ const toMongoFilterItem = async ({ key, filterFields, filter }) => {
 
 export default async function parseFilter(filter: { [key: string]: any }, filterFields: FilterFields) {
   const keys = Object.keys(filter)
-  const mongoFilters = await Promise.all(
-    keys
-      .filter(key => filterFields[key])
-      .map(key => toMongoFilterItem({ key, filter, filterFields })),
-  )
+  const mongoFilters = await Promise.all(keys
+    .filter(key => filterFields[key])
+    .map(key => toMongoFilterItem({ key, filter, filterFields })))
   return merge(...mongoFilters)
 }

@@ -59,7 +59,12 @@ async function run() {
 
   await Promise.all(dataToImport.map(importData))
 }
-
+export default function InitData() {
+  run()
+    .then(() => {
+      console.log('Success')
+    })
+}
 run()
   .then(() => {
     console.log('Success')

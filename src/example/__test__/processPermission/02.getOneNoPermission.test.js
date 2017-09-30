@@ -32,46 +32,7 @@ describe('Get one', () => {
     const query = gql`
     query ProductDetail {
       product(slug: "${slug}") {
-        _id
-        slug
-        name
-      }
-    }
-    `
-
-    const response = await client.query({
-      query,
-    })
-    expect(response.data.product.slug).to.equal(slug)
-  })
-
-  it('get with customer filter', async () => {
-    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
-    const query = gql`
-    query ProductDetail {
-      product(customFilterSlug: "${slug}") {
-        _id
-        slug
-        name
-      }
-    }
-    `
-
-    const response = await client.query({
-      query,
-    })
-    expect(response.data.product.slug).to.equal(slug)
-  })
-
-  it('get with populate', async () => {
-    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
-    const query = gql`
-    query ProductDetail {
-      product(slug: "${slug}") {
-        _id
-        slug
-        name
-        categories {
+        entity{
           _id
           slug
           name
@@ -83,9 +44,54 @@ describe('Get one', () => {
     const response = await client.query({
       query,
     })
-    expect(response.data.product.slug).to.equal(slug)
-    // expect(response.data.product.categories.length).to.gt(0)
-    // response.data.product.categories.forEach((cat) => {
+    expect(response.data.product.entity.slug).to.equal(slug)
+  })
+
+  it('get with customer filter', async () => {
+    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
+    const query = gql`
+    query ProductDetail {
+      product(customFilterSlug: "${slug}") {
+        entity{
+          _id
+          slug
+          name
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+    expect(response.data.product.entity.slug).to.equal(slug)
+  })
+
+  it('get with populate', async () => {
+    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
+    const query = gql`
+    query ProductDetail {
+      product(slug: "${slug}") {
+        entity{
+          _id
+          slug
+          name
+          categories {
+            _id
+            slug
+            name
+          }
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+    expect(response.data.product.entity.slug).to.equal(slug)
+    // expect(response.data.product.entity.categories.length).to.gt(0)
+    // response.data.product.entity.categories.forEach((cat) => {
     //   expect(cat).to.have.property('_id')
     //   expect(cat).to.have.property('slug')
     //   expect(cat).to.have.property('name')

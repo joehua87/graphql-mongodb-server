@@ -18,11 +18,13 @@ export default async function getEntities({
   sort: string,
   page: number,
   limit: number,
-  projection?: {},
+  projection?: string | string[] | {},
   populate: Array<string>,
 }) {
   debug(`Start getEntities for model ${Model.modelName}`)
-  debug({ sort, page, limit, projection, populate })
+  debug({
+    sort, page, limit, projection, populate,
+  })
   let q = Model.find(mongoFilter)
     .select(projection)
 

@@ -5,55 +5,23 @@ import gql from 'graphql-tag'
 export default gql`
 scalar JSON
 
-# Product Tag
-type ProductTag {
-  _id: ID!
-  id: String
-  slug: String!
-  name: String!
-  description: String
-}
-
-# Product Brand
-type ProductBrand {
-  _id: ID!
-  id: String
-  slug: String!
-  name: String!
-  description: String
-  website: String
-}
-
-# Product Category
-type ProductCategory {
-  _id: ID!
-  id: String
-  slug: String!
-  name: String!
-  description: String
-  isRoot: Boolean
-  parent: ProductCategory
-  children: [ProductCategory]
-  brands: [ProductBrand]
-}
-
 type Image {
-  src: String!
+  src: String
   title: String
 }
 
 type ProductAttribute {
-  key: String!
+  key: String
   value: String
 }
 
 type Product {
-  _id: ID!
+  _id: ID
   id: String
   model: String
   sku: String
-  slug: String!
-  name: String!
+  slug: String
+  name: String
   description: String
   body: String
   listPrice: Int
@@ -68,11 +36,18 @@ type Product {
 }
 
 type PagingInfo {
-  sort: String,
-  page: Int,
-  limit: Int,
-  total: Int,
-  hasMore: Boolean,
+  sort: String
+  page: Int
+  limit: Int
+  total: Int
+  hasMore: Boolean
+}
+
+type ProductListResponse {
+  entities: [Product]
+  pagingInfo: PagingInfo
+  error: JSON
+  permission: PermissionResult
 }
 
 type PermissionResult {
@@ -81,29 +56,74 @@ type PermissionResult {
   projection: JSON
 }
 type ProductResponse {
-  entities: [Product],
-  pagingInfo: PagingInfo,
-  error: JSON,
-  permission: PermissionResult
+  entity: Product
+  error: JSON
+}
+
+# Product Category
+type ProductCategory {
+  _id: ID
+  id: String
+  slug: String
+  name: String
+  description: String
+  isRoot: Boolean
+  parent: ProductCategory
+  children: [ProductCategory]
+  brands: [ProductBrand]
+}
+type ProductCategoryListResponse {
+  entities: [ProductCategory]
+  pagingInfo: PagingInfo
+  error: JSON
 }
 
 type ProductCategoryResponse {
-  entities: [ProductCategory],
-  pagingInfo: PagingInfo,
+  entity: ProductCategory
+  error: JSON
+}
+
+# Product Tag
+type ProductTag {
+  _id: ID
+  id: String
+  slug: String
+  name: String
+  description: String
+}
+
+type ProductTagListResponse {
+  entities: [ProductTag]
+  pagingInfo: PagingInfo
   error: JSON
 }
 
 type ProductTagResponse {
-  entities: [ProductTag],
-  pagingInfo: PagingInfo,
+  entity: ProductTag
+  error: JSON
+}
+
+# Product Brand
+type ProductBrand {
+  _id: ID
+  id: String
+  slug: String
+  name: String
+  description: String
+  website: String
+}
+
+type ProductBrandListResponse {
+  entities: [ProductBrand]
+  pagingInfo: PagingInfo
   error: JSON
 }
 
 type ProductBrandResponse {
-  entities: [ProductBrand],
-  pagingInfo: PagingInfo,
+  entity: ProductBrand
   error: JSON
 }
+
 
 # the schema allows the following query:
 type Query {
@@ -111,26 +131,26 @@ type Query {
   products(
     category: String, tag: String, brand: String
     sort: String, page: Int, limit: Int, actionCode: String
-  ): ProductResponse
+  ): ProductListResponse
   # Test overrideFilter
   restrictedProducts(
     category: String, tag: String, brand: String
     sort: String, page: Int, limit: Int
-  ): ProductResponse
-  brands(sort: String, page: Int, limit: Int): ProductBrandResponse
-  categories(sort: String, page: Int, limit: Int): ProductCategoryResponse
-  tags(sort: String, page: Int, limit: Int): ProductTagResponse
+  ): ProductListResponse
+  brands(sort: String, page: Int, limit: Int): ProductBrandListResponse
+  categories(sort: String, page: Int, limit: Int): ProductCategoryListResponse
+  tags(sort: String, page: Int, limit: Int): ProductTagListResponse
 
   # Detail
   product(
     slug: String,
     customFilterSlug: String,
-  ): Product
+  ): ProductResponse
   # Detail
   productWithPermission(
     params: JSON,
     actionCode: String
-  ): Product
+  ): ProductResponse
 }
 
 # we need to tell the server which types represent the root query

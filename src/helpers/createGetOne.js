@@ -1,7 +1,7 @@
 // @flow
 
 import R from 'ramda'
-import getFields from './getFields'
+import getProjection from './getProjection'
 import parseFilter from '../parseFilter'
 import { appCode } from '../config'
 
@@ -26,31 +26,54 @@ export default function createGetOne({
     context: any,
     info: any,
   ): Promise<any> {
-    if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: obj, args, context, info })
-      debug('checkAuthorization', { context, error })
-      if (error) return { error }
+    try {
+      if (checkAuthorization) {
+        const error = await checkAuthorization({
+          parent: obj, args, context, info,
+        })
+        debug('checkAuthorization', { context, error })
+        if (error) return { error }
+      }
+
+      // console.log(JSON.stringify({
+      //   obj,
+      //   info,
+      // }, null, 2))
+
+      let _overrideFilter = overrideFilter || {}
+
+      if (typeof _overrideFilter === 'function') {
+        _overrideFilter = await _overrideFilter(context)
+      }
+
+      const _mongoFilter = await parseFilter(args, filterFields)
+
+      // Merge MongoFilter parsed from query & override Filter
+      const mongoFilter = {
+        // keep default filter args but ignore customer filter keys
+        ...R.omit(Object.keys(filterFields), args),
+        ..._mongoFilter,
+        ..._overrideFilter,
+      }
+
+      const projection = getProjection({ info, field: 'entity' })
+      let q = Model.findOne(mongoFilter).select(projection)
+      populate.forEach((field) => {
+        if (projection.includes(field)) {
+          q = q.populate(field)
+        }
+      })
+      const entity = await q.lean()
+      if (entity) return { entity }
+      return {
+        error: {
+          message: 'Canot find entity',
+        },
+      }
+    } catch (error) {
+      return {
+        error,
+      }
     }
-
-    let _overrideFilter = overrideFilter || {}
-
-    if (typeof _overrideFilter === 'function') {
-      _overrideFilter = await _overrideFilter(context)
-    }
-
-    const _mongoFilter = await parseFilter(args, filterFields)
-
-    // Merge MongoFilter parsed from query & override Filter
-    const mongoFilter = {
-      // keep default filter args but ignore customer filter keys
-      ...R.omit(Object.keys(filterFields), args),
-      ..._mongoFilter,
-      ..._overrideFilter,
-    }
-
-    const { projection } = getFields(info)
-    let q = Model.findOne(mongoFilter).select(projection)
-    populate.forEach((field) => { q = q.populate(field) })
-    return q.lean()
   }
 }

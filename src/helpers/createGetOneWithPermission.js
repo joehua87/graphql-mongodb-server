@@ -43,41 +43,57 @@ export default function createGetOne({
     context: any,
     info: any,
   ): Promise<any> {
-    if (checkAuthorization) {
-      const error = await checkAuthorization({ parent: obj, args, context, info })
-      debug('checkAuthorization', { context, error })
-      if (error) return { error }
-    }
-    let _filterResult = {}
-    let _projectionResult = {}
-    if (checkPermission) {
-      const _resultCheckPermission = await checkPermission({ parent: obj, args, context, info })
-      _filterResult = _resultCheckPermission.filter || {}
-      _projectionResult = _resultCheckPermission.projection || {}
-      if (_resultCheckPermission.error) return { error: _resultCheckPermission.error }
-    }
+    try {
+      if (checkAuthorization) {
+        const error = await checkAuthorization({
+          parent: obj, args, context, info,
+        })
+        debug('checkAuthorization', { context, error })
+        if (error) return { error }
+      }
+      let _filterResult = {}
+      let _projectionResult = {}
+      if (checkPermission) {
+        const _resultCheckPermission = await checkPermission({
+          parent: obj, args, context, info,
+        })
+        _filterResult = _resultCheckPermission.filter || {}
+        _projectionResult = _resultCheckPermission.projection || {}
+        if (_resultCheckPermission.error) return { error: _resultCheckPermission.error }
+      }
 
-    let _overrideFilter = overrideFilter || {}
+      let _overrideFilter = overrideFilter || {}
 
-    if (typeof _overrideFilter === 'function') {
-      _overrideFilter = await _overrideFilter(context)
-    }
+      if (typeof _overrideFilter === 'function') {
+        _overrideFilter = await _overrideFilter(context)
+      }
 
-    const _mongoFilter = await parseFilter(args.params, filterFields)
+      const _mongoFilter = await parseFilter(args.params, filterFields)
 
-    // Merge MongoFilter parsed from query & override Filter
-    const mongoFilter = {
+      // Merge MongoFilter parsed from query & override Filter
+      const mongoFilter = {
       // keep default filter args but ignore customer filter keys
-      ...R.omit(Object.keys(filterFields), args.params),
-      ..._mongoFilter,
-      ..._overrideFilter,
-      ..._filterResult,
+        ...R.omit(Object.keys(filterFields), args.params),
+        ..._mongoFilter,
+        ..._overrideFilter,
+        ..._filterResult,
+      }
+      const { projectionInfo } = getFields(info)
+      const projection = mixedProjection({ source1: projectionInfo, source2: _projectionResult })
+      let q = Model.findOne(mongoFilter)
+        .select(projection)
+      populate.forEach((field) => { q = q.populate(field) })
+      const entity = await q.lean()
+      if (entity) return { entity }
+      return {
+        error: {
+          message: 'Canot find entity',
+        },
+      }
+    } catch (error) {
+      return {
+        error,
+      }
     }
-    const { projectionInfo } = getFields(info)
-    const projection = mixedProjection({ source1: projectionInfo, source2: _projectionResult })
-    let q = Model.findOne(mongoFilter)
-      .select(projection)
-    populate.forEach((field) => { q = q.populate(field) })
-    return q.lean()
   }
 }
