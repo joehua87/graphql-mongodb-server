@@ -4,9 +4,9 @@ import { expect } from 'chai'
 import 'isomorphic-fetch'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import gql from 'graphql-tag'
-import app from '../app'
-import { setUpAndTearDown } from '../config-test'
-import { appCode } from '../../config'
+import app from '../../app'
+import { setUpAndTearDown } from '../../config-test'
+import { appCode } from '../../../config'
 
 const debug = require('debug')(`${appCode}:resolvers`)
 

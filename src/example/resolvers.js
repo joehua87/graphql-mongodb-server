@@ -7,6 +7,8 @@ import {
 } from './models'
 import createQuery from '../helpers/createQuery'
 import createGetOne from '../helpers/createGetOne'
+import createGetOneWithPermission from '../helpers/createGetOneWithPermission'
+
 import * as productConfig from './config/product'
 import { appCode } from '../config'
 
@@ -48,7 +50,17 @@ const checkPermission = async (...params) => {
       projection: { _id: 1, slug: 1, name: 1 },
       // projection: 'slug name description category listPrice -sku -salePrice -model',
     }
-  } 
+  } else if (params[0].args.actionCode === 'view_product_gt1600') {
+    return {
+      filter: {
+        $or: [
+          { listPrice: { $gt: 1600 } },
+        ],
+      },
+      projection: { _id: 1, slug: 1, name: 1 },
+      // projection: 'slug name description category listPrice -sku -salePrice -model',
+    }
+  }
   return {
     error: {
       code: 1,
@@ -90,6 +102,13 @@ const resolveFunctions = {
       filterFields: productConfig.filters,
       populate: productConfig.populate,
       checkAuthorizationSuccess,
+    }),
+    productWithPermission: createGetOneWithPermission({
+      Model: ProductModel.Model,
+      filterFields: productConfig.filters,
+      populate: productConfig.populate,
+      checkAuthorizationSuccess,
+      checkPermission,
     }),
   },
 }

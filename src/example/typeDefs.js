@@ -126,6 +126,11 @@ type Query {
     slug: String,
     customFilterSlug: String,
   ): Product
+  # Detail
+  productWithPermission(
+    params: JSON,
+    actionCode: String
+  ): Product
 }
 
 # we need to tell the server which types represent the root query
