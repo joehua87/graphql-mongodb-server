@@ -10,3 +10,4 @@ export default function getFields(info: { fieldNodes: Array<any> }): { name: str
     }
   })[0]
 }
+

@@ -9,6 +9,24 @@ import { appCode } from '../config'
 
 const debug = require('debug')(`${appCode}:create-query`)
 
+const mixedProjection = ({
+  source1, source2 }: {
+  source1: string[],
+  source2: any
+}) => {
+  const result = {}
+  if (source1 === null || source1 === undefined || source1 === ' ') return source2
+  const keys = Object.keys(source2)
+  const fields1 = source1
+  keys.map((item) => {
+    if (fields1.indexOf(item) > -1 && source2[item] > 0) {
+      result[item] = 1
+      return item
+    }
+    return null
+  })
+  return result
+}
 /*
  * Create Query Resolvers
  */
@@ -18,16 +36,18 @@ export default function createQuery({
   filterFields = {},
   populate = [],
   checkAuthorization,
+  checkPermission,
 }: {
   Model: any,
   overrideFilter?: { [key: string]: any } | Function,
   filterFields?: FilterFields,
   populate?: Array<string>,
   checkAuthorization?: Function,
+  checkPermission?: Function,
 } = {}): QueryExtractorFn {
   return async (
     obj: any,
-    args: { sort: string, page: number, limit: number },
+    args: { sort: string, page: number, limit: number, actionCode: string },
     context,
     info: any,
   ): Promise<QueryExtractorResult> => {
@@ -40,6 +60,17 @@ export default function createQuery({
       })
       debug('checkAuthorization', { context, error })
       if (error) return { error }
+    }
+    let _filterResult = { }
+    let _projectionResult = { }
+    let _errorResult = {}
+    if (checkPermission) {
+      const _resultCheckPermission = await checkPermission({
+        parent: obj, args, context, info,
+      })
+      _filterResult = _resultCheckPermission.filter || {}
+      _projectionResult = _resultCheckPermission.projection || {}
+      _errorResult = _resultCheckPermission.error || {}
     }
 
     let _overrideFilter = overrideFilter || {}
@@ -56,10 +87,11 @@ export default function createQuery({
     const mongoFilter = {
       ..._mongoFilter,
       ..._overrideFilter,
+      ..._filterResult,
     }
 
     const projection = getProjection({ field: 'entities', info })
-
+    const mixProjection = mixedProjection({ source1: projection, source2: _projectionResult })
     debug('projection', projection)
     debug('populate', R.intersection(populate, projection))
 
@@ -69,7 +101,7 @@ export default function createQuery({
       sort,
       page,
       limit,
-      projection,
+      projection: mixProjection,
       populate,
     })
 
@@ -80,9 +112,13 @@ export default function createQuery({
       page,
       limit,
     })
-
     return {
       entities,
+      permission: {
+        error: _errorResult,
+        filter: _filterResult,
+        projection: _projectionResult,
+      },
       pagingInfo: _pagingInfo,
     }
   }

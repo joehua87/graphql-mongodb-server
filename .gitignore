@@ -41,3 +41,12 @@ lib
 # Docker yarn cache
 .yarn-cache.tgz
 .docker
+
+# env
+.env
+
+# config eslintrc by vscode
+.eslintrc.json
+
+# task in vscode
+.vscode/task.json
