@@ -1,5 +1,9 @@
 // @flow
 
+import { appCode } from '../config'
+
+const debug = require('debug')(`${appCode}:createMutation`)
+
 export function createRemoveMutation({
   Model,
   populate = [],
@@ -42,10 +46,15 @@ export function createCreateMutation({
       })
       if (error) return { error }
     }
+    debug('before insert', entity)
     const { _id } = await Model.create(entity)
+    // const data = Model(entity)
+    // debug('data', data)
+    // const { _id } = await data.save()
     const q = Model.findOne({ _id })
     populate.forEach(field => q.populate(field))
     const result = await q.lean()
+    debug('after insert', result)
     return {
       result,
     }
@@ -70,13 +79,18 @@ export function createEditMutation({
     }
 
     const { _id, ...rest } = entity
-    const q = Model.findOneAndUpdate(
+    debug('before update', rest.section)
+    const data = Model(entity)
+    debug('data', data.section)
+    await Model.update(
       { _id },
       { $set: rest },
       { new: true },
     )
+    const q = Model.findOne({ _id })
     populate.forEach(field => q.populate(field))
     const result = await q.lean()
+    debug('after update', result.section)
     return {
       result,
     }

@@ -4,10 +4,13 @@ import {
   ProductModel,
   ProductCategoryModel,
   ProductTagModel,
+  PostModel,
 } from './models'
 import createQuery from '../helpers/createQuery'
 import createGetOne from '../helpers/createGetOne'
+import createMutation from '../helpers/createMutation'
 import * as productConfig from './config/product'
+import * as postConfig from './config/post'
 import { appCode } from '../config'
 
 const debug = require('debug')(`${appCode}:resolvers`)
@@ -32,6 +35,18 @@ const resolveFunctions = {
       populate: productConfig.populate,
       checkAuthorizationSuccess,
     }),
+    posts: createQuery({
+      Model: PostModel.Model,
+      filterFields: postConfig.filters,
+      populate: postConfig.populate,
+      checkAuthorizationSuccess,
+    }),
+    post: createGetOne({
+      Model: PostModel.Model,
+      filterFields: postConfig.filters,
+      populate: postConfig.populate,
+      checkAuthorizationSuccess,
+    }),
     restrictedProducts: createQuery({
       Model: ProductModel.Model,
       filterFields: productConfig.filters,
@@ -54,6 +69,14 @@ const resolveFunctions = {
       filterFields: productConfig.filters,
       populate: productConfig.populate,
       checkAuthorizationSuccess,
+    }),
+  },
+  Mutation: {
+    ...createMutation({
+      name: 'Post',
+      Model: PostModel.Model,
+      populate: postConfig.populate,
+      checkAuthorization: checkAuthorizationSuccess,
     }),
   },
 }

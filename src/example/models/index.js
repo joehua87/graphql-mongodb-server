@@ -10,4 +10,5 @@ export * as ProductBrandModel from './product-brand.model'
 export * as ProductAttributeModel from './product-attribute.model'
 export * as ProductAttributeGroupModel from './product-attribute-group.model'
 export * as ProductModel from './product.model'
+export * as PostModel from './post.model'
 // Add export here

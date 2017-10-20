@@ -15,8 +15,37 @@ const client = new ApolloClient({
   }),
 })
 
-describe('Query list: get categories', () => {
-  setUpAndTearDown()
+describe('Query list: get posts', () => {
+  setUpAndTearDown([
+    {
+      schemaName: 'Post',
+      entities: [
+        {
+          _id: '59e990eca5b60b7e475e001f',
+          name: 'Hello World',
+          data: {
+            data: {
+              title: 'Hello World',
+            },
+            theme: {
+              title: '',
+            },
+            sectionData: {
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+            sectionTheme: {
+              root: '',
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+          },
+        },
+      ],
+    },
+  ])
 
   let server
   before(() => {
@@ -29,7 +58,7 @@ describe('Query list: get categories', () => {
 
   it('return error if checkAuthorization fail', async () => {
     const query = gql`
-    query TodoApp {
+    query {
       categories {
         pagingInfo {
           sort
@@ -40,7 +69,6 @@ describe('Query list: get categories', () => {
         }
         entities {
           _id
-          slug
           name
         }
         error
@@ -58,8 +86,8 @@ describe('Query list: get categories', () => {
 
   it('success', async () => {
     const query = gql`
-    query TodoApp {
-      tags {
+    query {
+      posts {
         pagingInfo {
           sort
           page
@@ -69,7 +97,6 @@ describe('Query list: get categories', () => {
         }
         entities {
           _id
-          slug
           name
         }
         error
@@ -81,7 +108,7 @@ describe('Query list: get categories', () => {
       query,
     })
 
-    expect(response.data.tags.error).to.equal(null)
-    expect(response.data.tags.pagingInfo.total).to.gt(0)
+    expect(response.data.posts.error).to.equal(null)
+    expect(response.data.posts.pagingInfo.total).to.gt(0)
   })
 })

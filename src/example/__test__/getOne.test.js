@@ -16,7 +16,36 @@ const client = new ApolloClient({
 })
 
 describe('Get one', () => {
-  setUpAndTearDown()
+  setUpAndTearDown([
+    {
+      schemaName: 'Post',
+      entities: [
+        {
+          _id: '59e990eca5b60b7e475e001f',
+          name: 'Hello World',
+          data: {
+            data: {
+              title: 'Hello World',
+            },
+            theme: {
+              title: '',
+            },
+            sectionData: {
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+            sectionTheme: {
+              root: '',
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+          },
+        },
+      ],
+    },
+  ])
 
   let server
   before(() => {
@@ -28,15 +57,16 @@ describe('Get one', () => {
   })
 
   it('get', async () => {
-    const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
+    const _id = '59e990eca5b60b7e475e001f'
     const query = gql`
-    query ProductDetail {
-      product(slug: "${slug}") {
+    query {
+      post(_id: "59e990eca5b60b7e475e001f") {
         entity {
           _id
-          slug
           name
+          data
         }
+        error
       }
     }
     `
@@ -44,9 +74,12 @@ describe('Get one', () => {
     const response = await client.query({
       query,
     })
-    expect(response.data.product.entity.slug).to.equal(slug)
+    expect(response.data.post.entity).to.have.property('name')
+    expect(response.data.post.entity).to.have.property('data')
+    expect(response.data.post.entity._id).to.equal(_id)
   })
 
+  /*
   it('get with customer filter', async () => {
     const slug = 'tu-nhua-duy-tan-sake-4-tang-4-ngan'
     const query = gql`
@@ -97,4 +130,5 @@ describe('Get one', () => {
       expect(cat).to.have.property('name')
     })
   })
+  */
 })

@@ -118,6 +118,27 @@ type ProductBrandResponse {
   error: JSON
 }
 
+type Post {
+  _id: ID!
+  name: String
+  data: JSON
+}
+
+type PostListResponse {
+  entities: [Post]
+  pagingInfo: PagingInfo
+  error: JSON
+}
+
+type PostResponse {
+  entity: Post
+  error: JSON
+}
+
+type PostMutationResponse {
+  result: Post
+  error: JSON
+}
 
 # the schema allows the following query:
 type Query {
@@ -140,11 +161,32 @@ type Query {
     slug: String,
     customFilterSlug: String,
   ): ProductResponse
+
+  posts(sort: String, page: Int, limit: Int): PostListResponse
+  post(_id: ID!): PostResponse
+}
+
+type Mutation {
+  createPost(
+    name: String!
+    description: String
+    data: JSON
+  ): PostMutationResponse
+
+  editPost(
+    _id: ID!
+    name: String!
+    description: String
+    data: JSON
+  ): PostMutationResponse
+
+  removePost(_id: ID!): PostMutationResponse
 }
 
 # we need to tell the server which types represent the root query
 # and root mutation types. We call them RootQuery and RootMutation by convention.
 schema {
   query: Query
+  mutation: Mutation
 }
 `

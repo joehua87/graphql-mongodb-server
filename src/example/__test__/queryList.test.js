@@ -16,21 +16,50 @@ const client = new ApolloClient({
 })
 
 function assertResponse({ data }: { data: any }) {
-  expect(data.products).to.have.property('entities')
-  expect(data.products).to.have.property('pagingInfo')
+  expect(data.posts).to.have.property('entities')
+  expect(data.posts).to.have.property('pagingInfo')
 
-  expect(data.products.pagingInfo.page).to.equal(1)
-  expect(data.products.pagingInfo.hasMore).to.be.a('boolean')
+  expect(data.posts.pagingInfo.page).to.equal(1)
+  expect(data.posts.pagingInfo.hasMore).to.be.a('boolean')
 
-  data.products.entities.forEach((product) => {
+  data.posts.entities.forEach((product) => {
     expect(product).to.have.property('_id')
-    expect(product).to.have.property('slug')
     expect(product).to.have.property('name')
+    expect(product).to.have.property('data')
   })
 }
 
 describe('Query list: get products', () => {
-  setUpAndTearDown()
+  setUpAndTearDown([
+    {
+      schemaName: 'Post',
+      entities: [
+        {
+          _id: '59e990eca5b60b7e475e001f',
+          name: 'Hello World',
+          data: {
+            data: {
+              title: 'Hello World',
+            },
+            theme: {
+              title: '',
+            },
+            sectionData: {
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+            sectionTheme: {
+              root: '',
+              title: '',
+              subtitle: '',
+              description: '',
+            },
+          },
+        },
+      ],
+    },
+  ])
 
   let server
   before(() => {
@@ -43,8 +72,8 @@ describe('Query list: get products', () => {
 
   it('without params', async () => {
     const query = gql`
-    query TodoApp {
-      products {
+    query {
+      posts {
         pagingInfo {
           sort
           page
@@ -54,13 +83,8 @@ describe('Query list: get products', () => {
         }
         entities {
           _id
-          slug
           name
-          images {
-            src
-            title
-          }
-          imageSrc
+          data
         }
       }
     }
@@ -71,10 +95,11 @@ describe('Query list: get products', () => {
     })
 
     assertResponse(response)
-    expect(response.data.products.pagingInfo.limit).to.equal(20)
-    expect(response.data.products.pagingInfo.total).to.equal(579)
+    expect(response.data.posts.pagingInfo.limit).to.equal(20)
+    expect(response.data.posts.pagingInfo.total).to.equal(1)
   })
 
+  /*
   it('without category _id filter', async () => {
     const query = gql`
     query TodoApp {
@@ -252,4 +277,5 @@ describe('Query list: get products', () => {
       })
     })
   })
+  */
 })
