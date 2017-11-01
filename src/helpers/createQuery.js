@@ -1,11 +1,12 @@
 // @flow
 
-import R from 'ramda'
+
 import parseFilter from '../parseFilter'
 import getEntities from './getEntities'
 import getPagingInfo from './getPagingInfo'
 import getProjection from './getProjection'
 import { appCode } from '../config'
+import refineProjection from './refineProjection'
 
 const debug = require('debug')(`${appCode}:create-query`)
 
@@ -16,15 +17,17 @@ export default function createQuery({
   Model,
   overrideFilter,
   filterFields = {},
-  populate = [],
+  populate: defaultPopulate = [],
+  availableProjection,
   checkAuthorization,
 }: {
-  Model: any,
-  overrideFilter?: { [key: string]: any } | Function,
-  filterFields?: FilterFields,
-  populate?: Array<string>,
-  checkAuthorization?: Function,
-} = {}): QueryExtractorFn {
+    Model: any,
+    overrideFilter?: { [key: string]: any } | Function,
+    filterFields?: FilterFields,
+    populate?: Array<string>,
+    availableProjection?: string | string[],
+    checkAuthorization?: Function,
+  } = {}): QueryExtractorFn {
   return async (
     obj: any,
     args: { sort: string, page: number, limit: number },
@@ -36,7 +39,10 @@ export default function createQuery({
     } = args
     if (checkAuthorization) {
       const error = await checkAuthorization({
-        parent: obj, args, context, info,
+        parent: obj,
+        args,
+        context,
+        info,
       })
       debug('checkAuthorization', { context, error })
       if (error) return { error }
@@ -48,9 +54,12 @@ export default function createQuery({
       _overrideFilter = await _overrideFilter(context)
     }
 
-    const _mongoFilter = await parseFilter({
-      ...filter,
-    }, filterFields)
+    const _mongoFilter = await parseFilter(
+      {
+        ...filter,
+      },
+      filterFields,
+    )
 
     // Merge MongoFilter parsed from query & override Filter
     const mongoFilter = {
@@ -58,10 +67,11 @@ export default function createQuery({
       ..._overrideFilter,
     }
 
-    const projection = getProjection({ field: 'entities', info })
-
-    debug('projection', projection)
-    debug('populate', R.intersection(populate, projection))
+    const { projection, populate } = refineProjection({
+      projection: getProjection({ field: 'entities', info }),
+      availableProjection,
+      populate: defaultPopulate,
+    })
 
     const entities = await getEntities({
       Model,

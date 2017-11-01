@@ -4,6 +4,7 @@ import R from 'ramda'
 import getProjection from './getProjection'
 import parseFilter from '../parseFilter'
 import { appCode } from '../config'
+import refineProjection from './refineProjection'
 
 const debug = require('debug')(`${appCode}:create-get-one`)
 
@@ -11,13 +12,15 @@ export default function createGetOne({
   Model,
   overrideFilter,
   filterFields = {},
-  populate,
+  populate: defaultPopulate = [],
+  availableProjection,
   checkAuthorization,
 }: {
   Model: any,
   overrideFilter?: { [key: string]: any } | Function,
   filterFields?: FilterFields,
   populate: Array<string>,
+  availableProjection?: string | string[],
   checkAuthorization?: Function,
 }) {
   return async function getOne(
@@ -29,7 +32,10 @@ export default function createGetOne({
     try {
       if (checkAuthorization) {
         const error = await checkAuthorization({
-          parent: obj, args, context, info,
+          parent: obj,
+          args,
+          context,
+          info,
         })
         debug('checkAuthorization', { context, error })
         if (error) return { error }
@@ -56,7 +62,12 @@ export default function createGetOne({
         ..._overrideFilter,
       }
 
-      const projection = getProjection({ info, field: 'entity' })
+      const { projection, populate } = refineProjection({
+        projection: getProjection({ field: 'entity', info }),
+        availableProjection,
+        populate: defaultPopulate,
+      })
+
       let q = Model.findOne(mongoFilter).select(projection)
       populate.forEach((field) => {
         if (projection.includes(field)) {

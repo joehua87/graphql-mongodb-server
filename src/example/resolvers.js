@@ -35,6 +35,13 @@ const resolveFunctions = {
       populate: productConfig.populate,
       checkAuthorizationSuccess,
     }),
+    restrictedFieldProducts: createQuery({
+      Model: ProductModel.Model,
+      filterFields: productConfig.filters,
+      populate: productConfig.populate,
+      availableProjection: '_id slug name',
+      checkAuthorizationSuccess,
+    }),
     posts: createQuery({
       Model: PostModel.Model,
       filterFields: postConfig.filters,
@@ -68,6 +75,13 @@ const resolveFunctions = {
       Model: ProductModel.Model,
       filterFields: productConfig.filters,
       populate: productConfig.populate,
+      checkAuthorizationSuccess,
+    }),
+    restrictedFieldProduct: createGetOne({
+      Model: ProductModel.Model,
+      filterFields: productConfig.filters,
+      populate: productConfig.populate,
+      availableProjection: '_id slug name',
       checkAuthorizationSuccess,
     }),
   },

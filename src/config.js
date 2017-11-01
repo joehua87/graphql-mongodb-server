@@ -1,2 +1,2 @@
 exports.appCode = 'graphql-mongodb-server'
-exports.mongoUri = 'mongodb://localhost/example-test'
+exports.mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/example-test'

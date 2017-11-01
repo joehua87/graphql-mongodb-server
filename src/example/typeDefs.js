@@ -147,6 +147,12 @@ type Query {
     category: String, tag: String, brand: String
     sort: String, page: Int, limit: Int
   ): ProductListResponse
+
+  # Return list only return _id & name
+  restrictedFieldProducts(
+    category: String, tag: String, brand: String
+    sort: String, page: Int, limit: Int
+  ): ProductListResponse
   # Test overrideFilter
   restrictedProducts(
     category: String, tag: String, brand: String
@@ -158,6 +164,10 @@ type Query {
 
   # Detail
   product(
+    slug: String,
+    customFilterSlug: String,
+  ): ProductResponse
+  restrictedFieldProduct(
     slug: String,
     customFilterSlug: String,
   ): ProductResponse
