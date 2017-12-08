@@ -55,9 +55,7 @@ export default function createQuery({
     }
 
     const _mongoFilter = await parseFilter(
-      {
-        ...filter,
-      },
+      filter,
       filterFields,
     )
 

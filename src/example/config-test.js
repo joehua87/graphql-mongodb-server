@@ -10,11 +10,16 @@ export function setUpAndTearDown(initialData) {
     await mongoose.openUri(mongoUri)
     if (initialData) {
       await Promise.all(initialData.map(async (item) => {
-        debug(`Start to insert ${item.schemaName}`)
-        const Model = mongoose.model(item.schemaName)
-        await Model.ensureIndexes()
-        const entities = await Model.create(item.entities)
-        debug(`${(entities || []).length} ${item.schemaName} inserted`)
+        try {
+          debug(`Start to insert ${item.schemaName}`)
+          const Model = mongoose.model(item.schemaName)
+          await Model.ensureIndexes()
+          const entities = await Model.create(item.entities)
+          debug(`${(entities || []).length} ${item.schemaName} inserted`)
+        } catch (error) {
+          debug('error', error)
+          throw error
+        }
       }))
     }
   })

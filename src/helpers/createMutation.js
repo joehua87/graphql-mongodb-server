@@ -80,8 +80,8 @@ export function createEditMutation({
 
     const { _id, ...rest } = entity
     debug('before update', rest.section)
-    const data = Model(entity)
-    debug('data', data.section)
+    // const data = Model(entity)
+    // debug('data', data.section)
     await Model.update(
       { _id },
       { $set: rest },
