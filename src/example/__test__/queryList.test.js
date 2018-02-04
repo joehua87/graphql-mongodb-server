@@ -97,6 +97,38 @@ describe('Query list: get products', () => {
     assertResponse(response)
     expect(response.data.posts.pagingInfo.limit).to.equal(20)
     expect(response.data.posts.pagingInfo.total).to.equal(1)
+    expect(response.data.posts.entities.length).to.equal(1)
+  })
+
+  it('with skip', async () => {
+    const query = gql`
+    query {
+      posts(skip: 1) {
+        pagingInfo {
+          sort
+          page
+          limit
+          total
+          hasMore
+          skip
+        }
+        entities {
+          _id
+          name
+          data
+        }
+      }
+    }
+    `
+
+    const response = await client.query({
+      query,
+    })
+
+    assertResponse(response)
+    expect(response.data.posts.pagingInfo.limit).to.equal(20)
+    expect(response.data.posts.pagingInfo.total).to.equal(1)
+    expect(response.data.posts.entities.length).to.equal(0)
   })
 
   /*

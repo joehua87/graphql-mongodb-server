@@ -1,41 +1,44 @@
 /* eslint-disable no-unused-vars */
 
-type PagingInfo = {
+// @flow
+
+export type PagingInfo = {
   sort: string,
   page: number,
   limit: number,
   total: number,
+  skip: number,
   hasMore: boolean,
 }
 
-type FilterItem = {
+export type FilterItem = {
   dbField?: string,
   compareType?: string,
   dbType: any,
   preprocess?: Function,
 }
 
-type FilterFields = { [key: string]: FilterItem }
+export type FilterFields = { [key: string]: FilterItem }
 
-type MongoFilter = { [key: string]: any }
+export type MongoFilter = { [key: string]: any }
 
-type GraphQLQuerySource = {
+export type GraphQLQuerySource = {
   pagingInfo: PagingInfo,
   filter: { [key: string]: any }
 }
 
-type GraphQLQueryArgs = {
+export type GraphQLQueryArgs = {
   parentObj: GraphQLQuerySource,
   args: any,
   context: any,
   info: any,
 }
 
-type QueryExtractorResult = {
+export type QueryExtractorResult = {
   error?: any,
   mongoFilter?: MongoFilter,
   pagingInfo?: { sort: string, page: number, limit: number },
   populate?: Array<string>,
 }
 
-type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number }) => Promise<QueryExtractorResult>
+export type QueryExtractorFn = (obj: any, { sort: string, page: number, limit: number, skip: number }) => Promise<QueryExtractorResult>

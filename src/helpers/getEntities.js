@@ -10,6 +10,7 @@ export default async function getEntities({
   sort,
   page,
   limit,
+  skip,
   projection,
   populate = [],
 }: {
@@ -18,6 +19,7 @@ export default async function getEntities({
   sort: string,
   page: number,
   limit: number,
+  skip: number,
   projection?: string | string[],
   populate: Array<string>,
 }) {
@@ -35,9 +37,8 @@ export default async function getEntities({
   } else {
     q = q.sort(sort)
   }
-
   q = q
-    .skip((page - 1) * limit)
+    .skip(((page - 1) * limit) + skip)
     .limit(limit)
 
   /*

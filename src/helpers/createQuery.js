@@ -30,12 +30,12 @@ export default function createQuery({
   } = {}): QueryExtractorFn {
   return async (
     obj: any,
-    args: { sort: string, page: number, limit: number },
+    args: { sort: string, page: number, limit: number, skip: number },
     context,
     info: any,
   ): Promise<QueryExtractorResult> => {
     const {
-      sort, page = 1, limit = 20, ...filter
+      sort, page = 1, limit = 20, skip = 0, ...filter
     } = args
     if (checkAuthorization) {
       const error = await checkAuthorization({
@@ -77,6 +77,7 @@ export default function createQuery({
       sort,
       page,
       limit,
+      skip,
       projection,
       populate,
     })

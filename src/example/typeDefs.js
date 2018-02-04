@@ -40,6 +40,7 @@ type PagingInfo {
   page: Int
   limit: Int
   total: Int
+  skip: Int
   hasMore: Boolean
 }
 
@@ -172,7 +173,7 @@ type Query {
     customFilterSlug: String,
   ): ProductResponse
 
-  posts(sort: String, page: Int, limit: Int): PostListResponse
+  posts(sort: String, page: Int, limit: Int, skip: Int): PostListResponse
   post(_id: ID!): PostResponse
 }
 
