@@ -10,12 +10,14 @@ export default async function getPagingInfo({
   sort,
   page,
   limit,
+  skip,
 }: {
   Model: any,
   mongoFilter: MongoFilter,
   sort: string,
   page: number,
   limit: number,
+  skip: number,
 
 }) {
   debug(`Start getPagingInfo for model ${Model.modelName}`)
@@ -27,6 +29,7 @@ export default async function getPagingInfo({
     limit,
     total,
     hasMore,
+    skip,
   }
   debug(result)
   return result

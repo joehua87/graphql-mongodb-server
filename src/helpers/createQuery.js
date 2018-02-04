@@ -88,6 +88,7 @@ export default function createQuery({
       sort,
       page,
       limit,
+      skip,
     })
 
     return {

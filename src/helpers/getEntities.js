@@ -25,7 +25,7 @@ export default async function getEntities({
 }) {
   debug(`Start getEntities for model ${Model.modelName}`)
   debug({
-    sort, page, limit, projection, populate,
+    sort, page, limit, projection, populate, skip,
   })
   let q = Model.find(mongoFilter)
     .select(projection)
